@@ -1,497 +1,272 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Enchiridion — Launcher V1</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Orbitron:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="TCC.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Enchiridion — RPG educacional de dark fantasy feito em RPG Maker MV. Exploração, narrativa envolvente e preparação para o ENEM.">
+  <title>Enchiridion — Launcher 2.3.4</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Orbitron:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="TCC.css">
 </head>
 <body>
 
-<!-- CURSOR -->
-<div class="cursor-dot" id="cursorDot"></div>
-<div class="cursor-ring" id="cursorRing"></div>
-<div class="cursor-glow" id="cursorGlow"></div>
+  <!-- Skip link para acessibilidade -->
+  <a href="#main-content" class="skip-link">Ir para o conteúdo principal</a>
 
-<!-- LOADER -->
-<div class="loader-overlay" id="loaderOverlay">
-  <div class="loader-inner">
-    <div class="loader-sigil"></div>
-    <div class="loader-logo">ENCHIRIDION</div>
-    <div class="loader-bar-wrap">
-      <div class="loader-bar" id="loaderBar"></div>
-    </div>
-    <div class="loader-text" id="loaderText">INICIALIZANDO SISTEMA</div>
-  </div>
-</div>
+  <!-- CURSOR PERSONALIZADO (desativado em dispositivos touch via CSS/JS) -->
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+  <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
 
-<!-- NAVBAR -->
-<nav class="navbar" id="navbar">
-  <div class="navbar-inner">
-    <a href="#" class="nav-logo">
-      <span class="nav-logo-icon">⬡</span>
-      <span>ECHI<span class="nav-logo-accent">RI</span>DION</span>
-    </a>
-    <div class="nav-links">
-      <a href="#" class="nav-link">Menu</a>
-      <a href="#features" class="nav-link">Funções</a>
-      <a href="#support" class="nav-link">Suporte</a>
-    </div>
-    <!-- AUTH TRIGGER -->
-    <div class="auth-nav-wrapper" id="authNavWrapper">
-      <!-- LOGGED OUT STATE -->
-      <button class="btn-auth-login" id="authLoginBtn" onclick="toggleAuthDropdown(event)">
-        <span class="auth-login-icon">◈</span>
-        <span>Entrar</span>
-        <span class="auth-login-chevron" id="authChevron">›</span>
-      </button>
-
-      <!-- LOGGED IN STATE (hidden initially) -->
-      <button class="btn-auth-user" id="authUserBtn" onclick="toggleAuthDropdown(event)" style="display:none">
-        <div class="auth-avatar" id="authAvatar">
-          <span class="auth-avatar-letter" id="authAvatarLetter">A</span>
-          <span class="auth-status-dot"></span>
-        </div>
-        <div class="auth-user-info">
-          <span class="auth-username" id="authUsername">Aventureiro</span>
-          <span class="auth-tier" id="authTier">◈ STANDARD</span>
-        </div>
-        <span class="auth-login-chevron" id="authUserChevron">›</span>
-      </button>
-
-      <!-- DROPDOWN PANEL -->
-      <div class="auth-dropdown" id="authDropdown">
-        <div class="auth-dropdown-bloom"></div>
-
-        <!-- LOGIN PANEL (default) -->
-        <div class="auth-panel" id="panelLogin">
-          <div class="auth-panel-header">
-            <div class="auth-sigil">⬡</div>
-            <div>
-              <div class="auth-panel-title">ENTRAR</div>
-              <div class="auth-panel-sub">Acesse sua conta Enchiridion</div>
-            </div>
-          </div>
-
-          <div class="auth-divider-label">Acesso rápido</div>
-
-          <div class="auth-social-list">
-            <button class="auth-social-btn" onclick="socialLogin('google')">
-              <svg class="auth-social-icon" viewBox="0 0 24 24" fill="none">
-                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
-                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-              </svg>
-              <span>Continuar com Google</span>
-              <span class="auth-social-arrow">›</span>
-            </button>
-
-            <button class="auth-social-btn" onclick="socialLogin('microsoft')">
-              <svg class="auth-social-icon" viewBox="0 0 24 24" fill="none">
-                <rect x="1" y="1" width="10" height="10" fill="#F25022"/>
-                <rect x="13" y="1" width="10" height="10" fill="#7FBA00"/>
-                <rect x="1" y="13" width="10" height="10" fill="#00A4EF"/>
-                <rect x="13" y="13" width="10" height="10" fill="#FFB900"/>
-              </svg>
-              <span>Continuar com Microsoft</span>
-              <span class="auth-social-arrow">›</span>
-            </button>
-
-            <button class="auth-social-btn" onclick="socialLogin('discord')">
-              <svg class="auth-social-icon" viewBox="0 0 24 24" fill="#5865F2">
-                <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.033.05a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/>
-              </svg>
-              <span>Continuar com Discord</span>
-              <span class="auth-social-arrow">›</span>
-            </button>
-
-            <button class="auth-social-btn" onclick="socialLogin('twitter')">
-              <svg class="auth-social-icon" viewBox="0 0 24 24" fill="#E7E9EA">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.631zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-              </svg>
-              <span>Continuar com X / Twitter</span>
-              <span class="auth-social-arrow">›</span>
-            </button>
-          </div>
-
-          <div class="auth-divider">
-            <span class="auth-divider-line"></span>
-            <span class="auth-divider-text">ou acesse com email</span>
-            <span class="auth-divider-line"></span>
-          </div>
-
-          <div class="auth-form" id="authLoginForm">
-            <div class="auth-field-group">
-              <label class="auth-field-label">EMAIL</label>
-              <input type="email" class="auth-input" id="authEmail" placeholder="seu@email.com" autocomplete="email">
-            </div>
-            <div class="auth-field-group">
-              <label class="auth-field-label">SENHA</label>
-              <div class="auth-input-wrap">
-                <input type="password" class="auth-input" id="authPassword" placeholder="••••••••" autocomplete="current-password">
-                <button class="auth-input-eye" type="button" onclick="togglePasswordVis()" id="eyeBtn" tabindex="-1">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                </button>
-              </div>
-            </div>
-            <div class="auth-options-row">
-              <label class="auth-remember">
-                <input type="checkbox" id="rememberCheck" class="auth-checkbox">
-                <span class="auth-checkmark"></span>
-                <span>Lembrar acesso</span>
-              </label>
-              <button class="auth-forgot" onclick="showPanel('panelForgot')">Esqueci a senha</button>
-            </div>
-            <button class="auth-submit-btn" onclick="doLogin()">
-              <span>Entrar</span>
-              <span class="auth-submit-shine"></span>
-            </button>
-          </div>
-
-          <div class="auth-footer-links">
-            <span>Novo por aqui?</span>
-            <button class="auth-text-link" onclick="showPanel('panelRegister')">Criar conta →</button>
-          </div>
-        </div>
-
-        <!-- REGISTER PANEL -->
-        <div class="auth-panel" id="panelRegister" style="display:none">
-          <div class="auth-panel-header">
-            <button class="auth-back-btn" onclick="showPanel('panelLogin')">‹</button>
-            <div>
-              <div class="auth-panel-title">CRIAR CONTA</div>
-              <div class="auth-panel-sub">Junte-se à Enchiridion</div>
-            </div>
-          </div>
-          <div class="auth-form">
-            <div class="auth-field-group">
-              <label class="auth-field-label">NOME DE USUÁRIO</label>
-              <input type="text" class="auth-input" id="registerUsername" placeholder="SeuAventureiro" autocomplete="username">
-            </div>
-            <div class="auth-field-group">
-              <label class="auth-field-label">EMAIL</label>
-              <input type="email" class="auth-input" id="registerEmail" placeholder="seu@email.com" autocomplete="email">
-            </div>
-            <div class="auth-field-group">
-              <label class="auth-field-label">SENHA</label>
-              <input type="password" class="auth-input" id="registerPassword" placeholder="Mínimo 8 caracteres" autocomplete="new-password">
-            </div>
-            <button class="auth-submit-btn" onclick="doRegister()">
-              <span>Criar Conta</span>
-              <span class="auth-submit-shine"></span>
-            </button>
-          </div>
-          <div class="auth-footer-links">
-            <span>Já tem conta?</span>
-            <button class="auth-text-link" onclick="showPanel('panelLogin')">Entrar →</button>
-          </div>
-        </div>
-
-        <!-- FORGOT PASSWORD PANEL -->
-        <div class="auth-panel" id="panelForgot" style="display:none">
-          <div class="auth-panel-header">
-            <button class="auth-back-btn" onclick="showPanel('panelLogin')">‹</button>
-            <div>
-              <div class="auth-panel-title">RECUPERAR</div>
-              <div class="auth-panel-sub">Enviaremos um link de reset</div>
-            </div>
-          </div>
-          <div class="auth-form">
-            <div class="auth-field-group">
-              <label class="auth-field-label">EMAIL CADASTRADO</label>
-              <input type="email" class="auth-input" id="forgotEmail" placeholder="seu@email.com">
-            </div>
-            <button class="auth-submit-btn" onclick="doForgot()">
-              <span>Enviar Link</span>
-              <span class="auth-submit-shine"></span>
-            </button>
-          </div>
-        </div>
-
-        <!-- ACCOUNT PANEL (logged in) -->
-        <div class="auth-panel" id="panelAccount" style="display:none">
-          <div class="auth-account-hero">
-            <div class="auth-account-avatar">
-              <span class="auth-account-letter" id="accountLetter">A</span>
-              <span class="auth-account-status-ring"></span>
-            </div>
-            <div class="auth-account-info">
-              <div class="auth-account-name" id="accountName">Aventureiro</div>
-              <div class="auth-account-email" id="accountEmail">usuario@email.com</div>
-              <div class="auth-account-badge">
-                <span class="badge-tier-dot"></span>
-                <span id="accountTierLabel">PADRÃO</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="auth-account-stats">
-            <div class="auth-stat">
-              <span class="auth-stat-val">3</span>
-              <span class="auth-stat-lbl">Downloads</span>
-            </div>
-            <div class="auth-stat-divider"></div>
-            <div class="auth-stat">
-              <span class="auth-stat-val">12h</span>
-              <span class="auth-stat-lbl">Online</span>
-            </div>
-            <div class="auth-stat-divider"></div>
-            <div class="auth-stat">
-              <span class="auth-stat-val online">●</span>
-              <span class="auth-stat-lbl">Status</span>
-            </div>
-          </div>
-
-          <nav class="auth-account-nav">
-            <button class="auth-nav-item" onclick="closeAuthDropdown()">
-              <span class="auth-nav-icon">◈</span>
-              <span>Perfil</span>
-              <span class="auth-nav-arrow">›</span>
-            </button>
-            <button class="auth-nav-item" onclick="closeAuthDropdown()">
-              <span class="auth-nav-icon">⚙</span>
-              <span>Configurações</span>
-              <span class="auth-nav-arrow">›</span>
-            </button>
-            <button class="auth-nav-item" onclick="closeAuthDropdown(); openModal()">
-              <span class="auth-nav-icon">↓</span>
-              <span>Downloads</span>
-              <span class="auth-nav-arrow">›</span>
-            </button>
-            <button class="auth-nav-item" onclick="closeAuthDropdown()">
-              <span class="auth-nav-icon">⬡</span>
-              <span>Biblioteca</span>
-              <span class="auth-nav-arrow">›</span>
-            </button>
-          </nav>
-
-          <button class="auth-logout-btn" onclick="doLogout()">
-            <span>⏻</span>
-            <span>Encerrar Sessão</span>
-          </button>
-        </div>
-
-        <!-- SUCCESS STATE -->
-        <div class="auth-success-overlay" id="authSuccess" style="display:none">
-          <div class="auth-success-sigil">⬡</div>
-          <div class="auth-success-title">ACESSO CONCEDIDO</div>
-          <div class="auth-success-sub">Bem-vindo de volta</div>
-        </div>
+  <!-- LOADER RÁPIDO -->
+  <div class="loader-overlay" id="loaderOverlay" role="status" aria-label="Carregando">
+    <div class="loader-inner">
+      <div class="loader-sigil" aria-hidden="true"></div>
+      <div class="loader-logo">ENCHIRIDION</div>
+      <div class="loader-bar-wrap">
+        <div class="loader-bar" id="loaderBar"></div>
       </div>
+      <div class="loader-text" id="loaderText">Preparando...</div>
     </div>
-
-    <button class="nav-hamburger" id="hamburger" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
-
-  </div>
-</nav>
-
-<!-- HERO -->
-<section class="hero" id="hero">
-  <div class="hero-bg">
-    <div class="hero-bg-base"></div>
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
-    <div class="grid-overlay"></div>
-    <div class="scanlines"></div>
-    <div class="vignette"></div>
-    <div class="corner-shadow-tl"></div>
-    <div class="corner-shadow-br"></div>
-    <canvas class="particles-canvas" id="particlesCanvas"></canvas>
   </div>
 
-  <div class="hero-content">
-    <div class="hero-badge" data-reveal>
-      <span class="badge-dot"></span>
-      V2.4.1 · Beta 3.0 Disponível
-    </div>
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar" aria-label="Navegação principal">
+    <div class="navbar-inner">
+      <a href="#hero" class="nav-logo">
+        <span class="nav-logo-icon" aria-hidden="true">⬡</span>
+        <span>ENCHIRIDION</span>
+      </a>
 
-    <div class="hero-title" data-reveal>
-      <span class="title-line title-pre">— ENCHIRIDION —</span>
-      <div style="position:relative">
-        <div class="title-bloom"></div>
-        <span class="title-line title-main">ENCHIRIDION</span>
+      <div class="nav-links" id="navLinks">
+        <a href="#hero" class="nav-link">Início</a>
+        <a href="#about" class="nav-link">Sobre</a>
+        <a href="#features" class="nav-link">Funções</a>
+        <a href="#media" class="nav-link">Mídia</a>
+        <a href="#support" class="nav-link">Suporte</a>
       </div>
-    </div>
 
-    <p class="hero-subtitle" data-reveal>
-      Windows, Mac &amp; Android · Engine RPG Maker MV<br>
-      <em>Experiência otimizada para hardware moderno — zero compromisso.</em>
-    </p>
-
-    <div class="hero-specs" data-reveal>
-      <div class="spec-item">
-        <span class="spec-value">1080P</span>
-        <span class="spec-label">UHD</span>
-      </div>
-      <div class="spec-divider"></div>
-      <div class="spec-item">
-        <span class="spec-value">60</span>
-        <span class="spec-label">FPS Lock</span>
-      </div>
-      <div class="spec-divider"></div>
-      <div class="spec-item">
-        <span class="spec-value">1.2</span>
-        <span class="spec-label">GB Download</span>
-      </div>
-      <div class="spec-divider"></div>
-      <div class="spec-item">
-        <span class="spec-value" style="font-size:0.7rem;color:var(--burnt-copper)">Rasteriz.</span>
-        <span class="spec-label">Alpha Blend</span>
-      </div>
-    </div>
-
-    <div class="hero-actions" data-reveal>
-      <button class="btn btn-primary" onclick="openModal()">
-        <span>↓</span>
-        <span>Download Grátis</span>
-        <span class="btn-shine"></span>
-        <span class="btn-glow"></span>
-      </button>
-      <button class="btn btn-secondary">
-        <span>▶</span>
-        <span>Ver Trailer</span>
+      <button class="nav-hamburger" id="hamburger" aria-label="Abrir menu" aria-expanded="false">
+        <span></span><span></span><span></span>
       </button>
     </div>
+  </nav>
 
-    <div class="hero-trust" data-reveal>
-      <span>✓ Download seguro</span>
-      <span class="trust-sep">·</span>
-      <span>✓ Sem vírus</span>
-      <span class="trust-sep">·</span>
-      <span>✓ +1K jogadores</span>
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-bg" aria-hidden="true">
+      <div class="hero-bg-base"></div>
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <div class="blob blob-3"></div>
+      <div class="grid-overlay"></div>
+      <div class="scanlines"></div>
+      <div class="vignette"></div>
+      <div class="corner-shadow-tl"></div>
+      <div class="corner-shadow-br"></div>
+      <canvas class="particles-canvas" id="particlesCanvas"></canvas>
     </div>
-  </div>
 
-  <div class="scroll-indicator">
-    <div class="scroll-line"></div>
-    <span>Scroll</span>
-  </div>
-</section>
+    <div class="hero-content">
+      <div class="hero-badge" data-reveal>
+        <span class="badge-dot" aria-hidden="true"></span>
+        2.3.4 Beta
+      </div>
 
-<!-- FEATURES -->
-<section class="features-section" id="features">
-  <div class="features-inner">
-    <div class="section-header" data-reveal>
-      <span class="section-tag">⬡ ARSENAL DE FERRAMENTAS</span>
-      <h2 class="section-title">Forjado para a <span class="text-accent">Excelência</span></h2>
-    </div>
-    <div class="features-grid">
-      <div class="feature-card" data-reveal>
-        <div class="feature-icon">⚔</div>
-        <h3>MOTOR OTIMIZADO</h3>
-        <p>Pipeline de renderização personalizado com rasterização acelerada por hardware e suporte a alpha blending avançado.</p>
+      <div class="hero-title" data-reveal>
+        <span class="title-line title-pre">— RPG EDUCACIONAL —</span>
+        <div class="title-wrap">
+          <div class="title-bloom" aria-hidden="true"></div>
+          <span class="title-line title-main">ENCHIRIDION</span>
+        </div>
       </div>
-      <div class="feature-card" data-reveal>
-        <div class="feature-icon">◈</div>
-        <h3>RESOLUÇÃO NATIVA</h3>
-        <p>Saída Full HD 1080p estável a 60fps travados, garantindo fluidez absoluta em qualquer hardware moderno.</p>
-      </div>
-      <div class="feature-card" data-reveal>
-        <div class="feature-icon">⬡</div>
-        <h3>MULTI-PLATAFORMA</h3>
-        <p>Compatibilidade nativa com Windows, macOS e Android sem comprometer performance ou fidelidade visual.</p>
-      </div>
-      <div class="feature-card" data-reveal>
-        <div class="feature-icon">◎</div>
-        <h3>INSTALAÇÃO LEVE</h3>
-        <p>Apenas 30MB de download comprimido — otimizado para distribuição rápida sem sacrificar conteúdo.</p>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- SUPPORT -->
-<section class="support-section" id="support">
-  <div class="support-inner" data-reveal>
-    <span class="ornament">— ⬡ —</span>
-    <p class="support-text">
-      Encontrou um problema? Acesse nosso
-      <a href="#" class="support-link">portal de suporte</a>
-      ou entre em contato via
-      <a href="#" class="support-link">Discord</a>
-    </p>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer class="site-footer">
-  <div class="footer-inner">
-    <span class="footer-brand">ENCHIRIDION</span>
-    <div class="footer-divider"></div>
-    <span class="footer-copy">© 2026 · TODOS OS DIREITOS RESERVADOS</span>
-    <div class="footer-divider"></div>
-    <span class="footer-copy">RPG MAKER MV ENGINE</span>
-  </div>
-</footer>
-
-<!-- MODAL -->
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-icon">↓</div>
-      <div>
-        <div class="modal-title">Enchiridion — Download</div>
-        <div class="modal-version">V2.4.1 RELEASE BUILD · 30.4 MB</div>
-      </div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="modal-info-row">
-        <span class="info-badge">Windows x64</span>
-        <span class="info-badge">macOS ARM</span>
-        <span class="info-badge">Android APK</span>
-        <span class="info-badge info-green">● Verificado</span>
-      </div>
-      <p class="modal-desc">
-        Baixe <strong>Enchiridion v2.4.1</strong> — a versão estável com todos os patches de otimização aplicados. A instalação é limpa e sem adware.
+      <p class="hero-subtitle" data-reveal>
+        Windows · RPG Maker MV<br>
+        <em>Uma experiência de exploração, narrativa e aprendizagem para o ENEM.</em>
       </p>
-      <div class="modal-progress-wrap" id="modalProgress">
-        <div class="modal-progress-bar" id="modalProgressBar"></div>
+
+      <div class="hero-specs" data-reveal>
+        <div class="spec-item">
+          <span class="spec-value">540</span>
+          <span class="spec-label">MB</span>
+        </div>
+        <div class="spec-divider" aria-hidden="true"></div>
+        <div class="spec-item">
+          <span class="spec-value">720p</span>
+          <span class="spec-label">Nativo</span>
+        </div>
+        <div class="spec-divider" aria-hidden="true"></div>
+        <div class="spec-item">
+          <span class="spec-value">RPG</span>
+          <span class="spec-label">Maker MV</span>
+        </div>
       </div>
-      <p class="modal-note">SHA-256 VERIFICADO · ASSINATURA DIGITAL VÁLIDA</p>
+
+      <div class="hero-actions" data-reveal>
+        <button class="btn btn-primary" onclick="openModal()">
+          <span aria-hidden="true">↓</span>
+          <span>Baixar (Em breve)</span>
+          <span class="btn-shine" aria-hidden="true"></span>
+          <span class="btn-glow" aria-hidden="true"></span>
+        </button>
+      </div>
+
+      <div class="hero-trust" data-reveal>
+        <span>✓ Projeto educacional</span>
+        <span class="trust-sep" aria-hidden="true">·</span>
+        <span>✓ Código limpo</span>
+      </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
-      <button class="btn btn-primary btn-modal-confirm" id="modalConfirmBtn" onclick="startDownload()">
-        <span>↓</span> Iniciar Download
-        <span class="btn-shine"></span>
-        <span class="btn-glow"></span>
-      </button>
+
+    <div class="scroll-indicator" aria-hidden="true">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about-section" id="about">
+    <div class="about-inner">
+      <div class="section-header" data-reveal>
+        <span class="section-tag">⬡ SOBRE O PROJETO</span>
+        <h2 class="section-title">Uma Jornada de <span class="text-accent">Aprendizagem</span></h2>
+      </div>
+      <div class="about-content" data-reveal>
+        <p>
+          Enchiridion é um RPG educacional desenvolvido em RPG Maker MV, criado com foco em exploração, narrativa envolvente e preparação acadêmica. O projeto combina elementos de dark fantasy com conteúdo pedagógico, oferecendo uma experiência única para jogadores interessados em aprender através do gameplay.
+        </p>
+        <p>
+          Desenvolvido com Windows como plataforma principal, o jogo apresenta um mundo imersivo onde cada elemento visual, mecânica e história contribuem para a experiência educacional.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features-section" id="features">
+    <div class="features-inner">
+      <div class="section-header" data-reveal>
+        <span class="section-tag">⬡ CARACTERÍSTICAS</span>
+        <h2 class="section-title">O Que Oferecemos</h2>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card" data-reveal>
+          <div class="feature-icon" aria-hidden="true"></div>
+          <h3>Exploração</h3>
+          <p>Mundo coeso e detalhado onde cada localidade conta uma história e oferece oportunidades de aprendizagem natural.</p>
+        </div>
+        <div class="feature-card" data-reveal>
+          <div class="feature-icon" aria-hidden="true"></div>
+          <h3>Narrativa</h3>
+          <p>Histórias envolventes que mantêm o engajamento do jogador enquanto transmitem conhecimento de forma orgânica.</p>
+        </div>
+        <div class="feature-card" data-reveal>
+          <div class="feature-icon" aria-hidden="true"></div>
+          <h3>Educação</h3>
+          <p>Conteúdo preparatório para a redação do ENEM integrado de forma natural ao gameplay, sem interferir na diversão.</p>
+        </div>
+        <div class="feature-card" data-reveal>
+          <div class="feature-icon" aria-hidden="true"></div>
+          <h3>Gameplay</h3>
+          <p>Mecânicas de RPG clássicas adaptadas para Windows, oferecendo uma experiência familiar e acessível.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALERIA MULTIMÍDIA -->
+  <section class="media-section" id="media">
+    <div class="media-inner">
+      <div class="section-header" data-reveal>
+        <span class="section-tag">⬡ MÍDIA</span>
+        <h2 class="section-title">Explore o <span class="text-accent">Mundo</span></h2>
+      </div>
+
+      <div class="media-gallery" data-reveal>
+        <!-- Área principal de exibição -->
+        <div class="gallery-main">
+          <div class="gallery-display" id="galleryDisplay">
+            <img id="mediaImage" src="" alt="" class="gallery-media" style="display:none;">
+            <video id="mediaVideo" class="gallery-media" controls style="display:none;"></video>
+            <div id="mediaPlaceholder" class="gallery-placeholder">
+              <span aria-hidden="true">◈</span>
+              <p>Galeria de mídia vazia</p>
+              <small>As capturas de tela e vídeos serão adicionados em breve</small>
+            </div>
+          </div>
+          <div class="gallery-description" id="galleryDescription">
+            <h3 id="mediaTitle">—</h3>
+            <p id="mediaDesc">Nenhuma mídia selecionada</p>
+          </div>
+        </div>
+
+        <!-- Controles e miniaturas -->
+        <div class="gallery-controls">
+          <button class="gallery-nav-btn gallery-prev" id="galleryPrev" aria-label="Mídia anterior">‹</button>
+          <div class="gallery-thumbnails-wrap">
+            <div class="gallery-thumbnails" id="galleryThumbnails"></div>
+          </div>
+          <button class="gallery-nav-btn gallery-next" id="galleryNext" aria-label="Próxima mídia">›</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUPPORT -->
+  <section class="support-section" id="support">
+    <div class="support-inner" data-reveal>
+      <span class="ornament" aria-hidden="true">— ⬡ —</span>
+      <p class="support-text">
+        Encontrou um problema ou tem sugestões?<br>
+        Entre em contato através das redes oficiais do projeto.
+      </p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span class="footer-brand">ENCHIRIDION</span>
+      <div class="footer-divider" aria-hidden="true"></div>
+      <span class="footer-copy">© 2026 · Projeto TCC</span>
+      <div class="footer-divider" aria-hidden="true"></div>
+      <span class="footer-copy">RPG Maker MV</span>
+    </div>
+  </footer>
+
+  <!-- MODAL DE DOWNLOAD -->
+  <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-icon" aria-hidden="true">↓</div>
+        <div>
+          <div class="modal-title" id="modalTitle">Download do Enchiridion</div>
+          <div class="modal-version">Versão em desenvolvimento</div>
+        </div>
+        <button class="modal-close" onclick="closeModal()" aria-label="Fechar">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-info-row">
+          <span class="info-badge">Windows</span>
+          <span class="info-badge info-status">● Em desenvolvimento</span>
+        </div>
+        <p class="modal-desc">
+          O Enchiridion ainda está em desenvolvimento. O download será disponibilizado em breve quando a versão estiver pronta para testes.
+        </p>
+        <p class="modal-note">Volte em breve para mais novidades!</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeModal()">Fechar</button>
+      </div>
     </div>
   </div>
-</div>
 
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+  <!-- Main content wrapper para acessibilidade -->
+  <div id="main-content" style="display: none;" tabindex="-1"></div>
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyCqzRntlduBgnS6xKuZIv_8EYRNbapm_X4",
-    authDomain: "enchiridion-v04.firebasseapp.com",
-    projectId: "enchiridion-v04",
-    storageBucket: "enchiridion-v04.firebasestorage.app",
-    messagingSenderId: "615727807731",
-    appId: "1:615727807731:web:8c1803ad7edcea3ca1cb86",
-    measurementId: "G-5XYPCKLRC6"
-};
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
-
-
-<script src="TCC.js"></script>
+  <script src="TCC.js"></script>
 </body>
 </html>
